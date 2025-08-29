@@ -1,0 +1,108 @@
+import java.util.Scanner;
+import java.util.Random;
+
+// Abstract class Character (Abstraction)
+abstract class Character {
+    private String name;  // stores the name from the main class constructors
+
+    public Character(String name) {
+        this.name = name;
+    }
+
+    public String getName() { // the part that shows dialogue about the attack
+        return name;
+    }
+
+    // Ts
+    public abstract void attack();
+}
+
+// Mage inherits Character (Inheritance)
+class Mage extends Character {
+    public Mage(String name) {
+        super(name);
+    }
+
+    @Override
+    public void attack() {
+        System.out.println(getName() + " casts a powerful Firebolt!");
+    }
+}
+
+// Fighter inherits Character (Inheritance)
+class Fighter extends Character {
+    public Fighter(String name) {
+        super(name);
+    }
+
+    @Override
+    public void attack() {
+        System.out.println(getName() + " swings a mighty sword!");
+    }
+}
+
+public class RPGDemo {
+    public static void main(String[] args) throws InterruptedException {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        Character mage = new Mage("Mage"); // this creates the object "mage" which has the general traits of Character class and the unique traits of Mage Class
+        Character fighter = new Fighter("Fighter");
+        
+        System.out.println("Welcome to my RPG Demo!");
+        Thread.sleep(1000);
+        System.out.println("This is a game where you pick who wins, the Mage or A Fighter");
+        System.out.println("The chances are 50/50");
+        System.out.print("Press any key to continue");
+        String eh = scanner.nextLine();
+       
+        boolean playAgain = true; // Use a boolean for better readability
+
+        do {
+            System.out.println("Who do you bet will win? (Mage/Fighter): ");
+            System.out.println("Press 0 for mage ");
+            System.out.println("Press 1 for fighter ");
+            String bet = scanner.nextLine().trim();
+
+            // Randomly pick the winner (0 = Mage, 1 = Fighter)
+            int winner = random.nextInt(2);
+
+            // Announce attacks
+            mage.attack();
+            Thread.sleep(1000);
+            fighter.attack();
+            Thread.sleep(1000);
+
+            String winnerName = (winner == 0) ? mage.getName() : fighter.getName();
+
+            System.out.println("The winner is: " + winnerName + "!");
+
+            if (bet.equalsIgnoreCase(winnerName)) {
+                System.out.println("Congratulations! Your bet was correct.");
+            } else {
+                System.out.println("Sorry, better luck next time.");
+            }
+            Thread.sleep(1000);
+            
+            // Prevents invalid option. I used a string here cause idk just felt like it 
+            while (true) { 
+                System.out.println("Press 1 to play again");
+                System.out.println("Press 2 to exit the game"); 
+                String option = scanner.nextLine();
+                
+                if (option.equals("1")) { 
+                    playAgain = true; 
+                    break; // Exit the inner loop to play again
+                } else if (option.equals("2")) { 
+                    playAgain = false; 
+                    break; // Exit both loops
+                } else { 
+                    System.out.println("Invalid Option"); 
+                } 
+            }
+        } while (playAgain);
+
+        scanner.close();
+        System.out.println("Thank you for playing!");
+    }
+}
